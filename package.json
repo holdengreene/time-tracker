@@ -1,5 +1,5 @@
 {
-  "name": "example-basic",
+  "name": "time-tracker",
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",
@@ -16,5 +16,8 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
   }
 }

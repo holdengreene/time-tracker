@@ -1,13 +1,14 @@
 import { Title } from "@solidjs/meta";
 import { createAsync, query } from "@solidjs/router";
-import { For } from "solid-js";
-import Counter from "~/components/Counter";
+import CreateProject from "~/components/CreateProject";
+import ProjectTable from "~/components/ProjectTable";
+import type { Project } from "~/types";
 
 const getProjects = query(async () => {
     'use server';
 
     const res = await fetch("http://localhost:3000/projects.json");
-    return await res.json();
+    return (await res.json()) as Project[];
 }, "projects");
 
 export const route = {
@@ -19,24 +20,12 @@ export default function Home() {
 
     return (
         <main>
-            <Title>Hello World</Title>
-            <h1>Hello world!</h1>
-            <Counter />
-            <For each={projects()}>
-                {project => (
-                    <div>
-                        <h2>{project.name}</h2>
-                        <p>{project.start} - {project.end}</p>
-                    </div>
-                )}
-            </For>
-            <p>
-                Visit{" "}
-                <a href="https://start.solidjs.com" target="_blank">
-                    start.solidjs.com
-                </a>{" "}
-                to learn how to build SolidStart apps.
-            </p>
+            <Title>Time Tracker</Title>
+            <h1>Time Tracker</h1>
+
+            <CreateProject />
+
+            <ProjectTable projects={projects} />
         </main>
     );
 }
