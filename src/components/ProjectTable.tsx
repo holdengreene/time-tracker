@@ -1,5 +1,6 @@
 import { AccessorWithLatest } from "@solidjs/router";
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
+import { friendlyTime } from "~/lib/util";
 import type { Project } from "~/types";
 
 type Props = {
@@ -12,8 +13,7 @@ export default function ProjectTable(props: Props) {
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Start</th>
-                    <th>End</th>
+                    <th>Total Time</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,8 +21,9 @@ export default function ProjectTable(props: Props) {
                     {project => (
                         <tr>
                             <td>{project.name}</td>
-                            <td>{project.start}</td>
-                            <td>{project.end}</td>
+                            <Show when={project.end}>
+                                <td>{friendlyTime(+project.end! - +project.start)}</td>
+                            </Show>
                         </tr>
                     )}
                 </For>

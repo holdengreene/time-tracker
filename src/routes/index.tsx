@@ -1,5 +1,6 @@
 import { Title } from "@solidjs/meta";
 import { createAsync, query } from "@solidjs/router";
+import { isNotNull } from "drizzle-orm";
 import CreateProject from "~/components/CreateProject";
 import ProjectTable from "~/components/ProjectTable";
 import { db } from "~/db";
@@ -8,9 +9,7 @@ import { projectTable } from "~/db/schema";
 const getProjects = query(async () => {
     'use server';
 
-    console.log(await db.select().from(projectTable).all())
-
-    return await db.select().from(projectTable).all();
+    return await db.select().from(projectTable).where(isNotNull(projectTable.end));
 }, "projects");
 
 export const route = {
