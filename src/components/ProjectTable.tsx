@@ -1,6 +1,6 @@
 import { AccessorWithLatest } from "@solidjs/router";
 import { For, Show } from "solid-js";
-import { activeProjectId, setActiveProjectId } from "~/lib/global";
+import { activeProjectId, setActiveProjectId, setActiveProjectName } from "~/lib/global";
 import { friendlyTime } from "~/lib/util";
 import type { Project } from "~/types";
 
@@ -28,7 +28,7 @@ export default function ProjectTable(props: Props) {
                             </Show>
                             <td>
                                 <Show when={project.end && !activeProjectId()}>
-                                    <button onClick={() => setActiveProjectId(project.id)}>Start</button>
+                                    <button onClick={() => setActiveProjectId(project.id) && setActiveProjectName(project.name)}>Start</button>
                                 </Show>
                             </td>
                         </tr>

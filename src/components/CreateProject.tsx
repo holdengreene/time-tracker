@@ -3,13 +3,8 @@ import { eq } from "drizzle-orm";
 import { createEffect, createSignal, Match, onCleanup, Switch } from "solid-js";
 import { db } from "~/db";
 import { projectTable } from "~/db/schema";
-import { activeProjectId, setActiveProjectId } from "~/lib/global";
+import { activeProjectId, activeProjectName, setActiveProjectId, setActiveProjectName } from "~/lib/global";
 import { friendlyTime } from "~/lib/util";
-
-
-let interval: NodeJS.Timeout;
-const [running, setRunning] = createSignal<boolean>(false);
-const [timer, setTimer] = createSignal<number | null>(null);
 
 const addProject = action(async (formData: FormData) => {
     'use server';
@@ -17,9 +12,9 @@ const addProject = action(async (formData: FormData) => {
     const name = formData.get("name") as string;
     const start = new Date().getTime();
 
-    const [project] = await db.insert(projectTable).values({ name, start: start.toString() }).returning({ id: projectTable.id });
+    const [project] = await db.insert(projectTable).values({ name, start: start.toString() }).returning({ id: projectTable.id, name: projectTable.name });
 
-    return { success: true, start, id: project.id };
+    return { success: true, start, id: project.id, name: project.name };
 });
 
 const stopProject = action(async (projectId: number, start: number) => {
@@ -44,8 +39,11 @@ const getProjectTotalTime = query(async (projectId: number) => {
 }, "projectStart");
 
 export default function CreateProject() {
+    let interval: NodeJS.Timeout;
     let form: HTMLFormElement | undefined;
     let start: number | undefined;
+    const [running, setRunning] = createSignal<boolean>(false);
+    const [timer, setTimer] = createSignal<number | null>(null);
 
     const submission = useSubmission(addProject);
 
@@ -59,8 +57,14 @@ export default function CreateProject() {
                 throw new Error("Project id is null");
             }
 
+
+            if (!submission.result?.name) {
+                throw new Error("Project name is null");
+            }
+
             start = submission.result?.start;
             setActiveProjectId(submission.result?.id);
+            setActiveProjectName(submission.result?.name);
 
             form?.reset();
             submission.clear();
@@ -104,8 +108,8 @@ export default function CreateProject() {
     return (
         <Switch>
             <Match when={running()}>
-                <p>Project created!</p>
-                <p>Time: {friendlyTime(timer() ?? 0)}</p>
+                <p>Tracking {activeProjectName()}</p>
+                <p>{friendlyTime(timer() ?? 0)}</p>
 
                 <button onClick={stopTimer}>Stop</button>
             </Match>
