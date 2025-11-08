@@ -2,17 +2,19 @@ import { Title } from "@solidjs/meta";
 import { createAsync, query } from "@solidjs/router";
 import CreateProject from "~/components/CreateProject";
 import ProjectTable from "~/components/ProjectTable";
-import type { Project } from "~/types";
+import { db } from "~/db";
+import { projectTable } from "~/db/schema";
 
 const getProjects = query(async () => {
     'use server';
 
-    const res = await fetch("http://localhost:3000/projects.json");
-    return (await res.json()) as Project[];
+    console.log(await db.select().from(projectTable).all())
+
+    return await db.select().from(projectTable).all();
 }, "projects");
 
 export const route = {
-    preoload: () => getProjects(),
+    preload: () => getProjects(),
 };
 
 export default function Home() {
