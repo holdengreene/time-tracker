@@ -1,10 +1,12 @@
 import { action, query, useAction, useSubmission } from "@solidjs/router";
 import { eq } from "drizzle-orm";
-import { createEffect, createSignal, Match, onCleanup, Switch } from "solid-js";
+import { batch, createEffect, createSignal, Match, onCleanup, onMount, Suspense, Switch } from "solid-js";
 import { db } from "~/db";
 import { projectTable } from "~/db/schema";
 import { activeProjectId, activeProjectName, setActiveProjectId, setActiveProjectName } from "~/lib/global";
 import { friendlyTime } from "~/lib/util";
+import { Project } from "~/types";
+import { TIMER_STATUS } from "~/types/constants";
 
 const addProject = action(async (formData: FormData) => {
     'use server';
@@ -12,9 +14,17 @@ const addProject = action(async (formData: FormData) => {
     const name = formData.get("name") as string;
     const start = new Date().getTime();
 
-    const [project] = await db.insert(projectTable).values({ name, start: start.toString() }).returning({ id: projectTable.id, name: projectTable.name });
+    const [project] = await db.insert(projectTable).values({ name, start, status: TIMER_STATUS.RUNNING }).returning({ id: projectTable.id, name: projectTable.name });
 
     return { success: true, start, id: project.id, name: project.name };
+});
+
+const startProject = action(async (projectId: number) => {
+    'use server';
+
+    const start = new Date().getTime();
+
+    await db.update(projectTable).set({ start, status: TIMER_STATUS.RUNNING }).where(eq(projectTable.id, projectId));
 });
 
 const stopProject = action(async (projectId: number, start: number) => {
@@ -27,7 +37,7 @@ const stopProject = action(async (projectId: number, start: number) => {
 
     totalTime = existingTotalTime + totalTime;
 
-    await db.update(projectTable).set({ start: start.toString(), end: end.toString(), totalTime }).where(eq(projectTable.id, projectId));
+    await db.update(projectTable).set({ start, end, totalTime, status: TIMER_STATUS.STOPPED }).where(eq(projectTable.id, projectId));
 });
 
 const getProjectTotalTime = query(async (projectId: number) => {
@@ -38,15 +48,30 @@ const getProjectTotalTime = query(async (projectId: number) => {
     return project?.totalTime ?? 0;
 }, "projectStart");
 
-export default function CreateProject() {
+type Props = {
+    runningProject: Project | undefined;
+};
+export default function CreateProject(props: Props) {
     let interval: NodeJS.Timeout;
     let form: HTMLFormElement | undefined;
     let start: number | undefined;
+    let totalTime: number = 0;
     const [running, setRunning] = createSignal<boolean>(false);
     const [timer, setTimer] = createSignal<number | null>(null);
 
-    const submission = useSubmission(addProject);
 
+    onMount(() => {
+        const runningProject = () => props.runningProject;
+
+        if (runningProject()) {
+            start = runningProject()?.start ?? 0;
+            totalTime = runningProject()?.totalTime ?? 0;
+            setActiveProjectId(runningProject()?.id);
+            setActiveProjectName(runningProject()?.name);
+        }
+    });
+
+    const submission = useSubmission(addProject);
     createEffect(() => {
         if (!submission.pending && submission.result?.success) {
             if (!submission.result?.start) {
@@ -72,8 +97,7 @@ export default function CreateProject() {
     });
 
     createEffect(async () => {
-        if (activeProjectId()) {
-            let totalTime = 0;
+        if (activeProjectId() && !running()) {
             if (!start) {
                 start = new Date().getTime();
                 totalTime = await getProjectTotalTime(activeProjectId()!)
@@ -83,24 +107,30 @@ export default function CreateProject() {
         }
     });
 
-    const stopProjectAction = useAction(stopProject)
+    const startProjectAction = useAction(startProject)
 
     function startTimer(startTime: number, totalTime: number = 0) {
         setRunning(true);
+        startProjectAction(activeProjectId() ?? 0);
 
         interval = setInterval(() => {
             setTimer(t => t = new Date().getTime() - startTime + totalTime!);
         }, 1000 / 60);
     }
 
+    const stopProjectAction = useAction(stopProject)
+
     function stopTimer() {
         clearInterval(interval);
-        setRunning(false);
-        setTimer(null);
 
         stopProjectAction(activeProjectId() ?? 0, start ?? 0);
-        setActiveProjectId(undefined);
-        start = undefined;
+
+        batch(() => {
+            setActiveProjectId(undefined);
+            start = undefined;
+            setRunning(false);
+            setTimer(null);
+        });
     }
 
     onCleanup(() => stopTimer());

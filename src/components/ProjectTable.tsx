@@ -1,11 +1,10 @@
-import { AccessorWithLatest } from "@solidjs/router";
 import { For, Show } from "solid-js";
 import { activeProjectId, setActiveProjectId, setActiveProjectName } from "~/lib/global";
 import { friendlyTime } from "~/lib/util";
 import type { Project } from "~/types";
 
 type Props = {
-    projects: AccessorWithLatest<Project[] | undefined>;
+    projects: Project[] | undefined;
 };
 
 export default function ProjectTable(props: Props) {
@@ -19,7 +18,7 @@ export default function ProjectTable(props: Props) {
                 </tr>
             </thead>
             <tbody>
-                <For each={props.projects()}>
+                <For each={props.projects}>
                     {project => (
                         <tr>
                             <td>{project.name}</td>
