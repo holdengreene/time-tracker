@@ -6,4 +6,5 @@ export const projectTable = sqliteTable("projects_table", {
     name: text().notNull(),
     start: text().notNull(),
     end: text().default(sql`null`),
+    totalTime: int().notNull().default(0),
 });
