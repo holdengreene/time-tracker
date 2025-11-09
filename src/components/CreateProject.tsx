@@ -70,6 +70,8 @@ export default function CreateProject(props: Props) {
             setActiveProjectId(runningProject()?.id);
             setActiveProjectName(runningProject()?.name);
         }
+
+        document.addEventListener("visibilitychange", tabState);
     });
 
     const submission = useSubmission(addProject);
@@ -131,10 +133,19 @@ export default function CreateProject(props: Props) {
             start = undefined;
             setRunning(false);
             setTimer(null);
+            totalTime = 0;
         });
     }
 
-    onCleanup(() => stopTimer());
+    function tabState() {
+        if (document.visibilityState === "hidden" && interval) {
+            clearInterval(interval);
+        } else {
+            startTimer(start ?? 0, totalTime);
+        }
+    }
+
+    onCleanup(() => { stopTimer(); document.removeEventListener("visibilitychange", tabState) });
 
     return (
         <Switch>
