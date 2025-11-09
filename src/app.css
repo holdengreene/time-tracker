@@ -85,7 +85,9 @@ input {
 }
 
 .container {
-    padding-inline: 12rem;
+    width: clamp(16rem, 90vw, 100rem);
+    padding-inline: min(1vw, var(--spacing-m));
+    margin-inline: auto;
 }
 
 .overview-grid {
@@ -94,6 +96,10 @@ input {
     gap: var(--spacing-m);
     align-items: flex-start;
     margin-bottom: var(--spacing-l);
+
+    @media (max-width: 1023px) {
+        grid-template-columns: 1fr;
+    }
 }
 
 .card {

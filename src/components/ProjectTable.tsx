@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, Show } from "solid-js";
+import { createEffect, createMemo, createSignal, For, Show } from "solid-js";
 import { activeProjectId, setActiveProjectId, setActiveProjectName } from "~/lib/global";
 import { friendlyTime } from "~/lib/util";
 import type { Project } from "~/types";
@@ -29,6 +29,8 @@ export default function ProjectTable(props: Props) {
     const [filter, setFilter] = createSignal<string>("");
     const [projectsPerPage, setProjectsPerPage] = createSignal<number>(10);
     const [currentPage, setCurrentPage] = createSignal<number>(1);
+
+    createEffect(() => setTotalProjects(projects()?.length ?? 0));
 
     const totalPages = createMemo<number>(() => Math.ceil(totalProjects() / projectsPerPage()));
 
@@ -95,7 +97,7 @@ export default function ProjectTable(props: Props) {
             <select id="per-page" value={projectsPerPage()} onChange={e => setProjectsPerPage(Number(e.target.value))}>
                 <For each={perPageOptions}>
                     {option => (
-                        <option value={option}>{option}</option>
+                        <option value={option} selected={option === projectsPerPage()}>{option}</option>
                     )}
                 </For>
             </select>
