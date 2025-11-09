@@ -1,10 +1,27 @@
 #!/bin/bash
 
-# Install nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+if ! command -v node &> dev/null; then
+    # Install nvm
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 
-\. "$HOME/.nvm/nvm.sh"
+    # This allows nvm to be used without a restart
+    \. "$HOME/.nvm/nvm.sh"
 
-nvm install 24
+    # Install that bad ole node
+    nvm install 24
 
-node -v
+    # Check the version
+    node -v
+fi
+
+# Always make sure we're up to date
+git pull
+
+# Start installing the site
+npm install
+
+# Build it all
+npm run build
+
+# Start the server
+npm run start
