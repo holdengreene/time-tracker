@@ -27,3 +27,47 @@
     align-items: center;
     gap: var(--spacing-s);
 }
+
+.page-links-list {
+    display: flex;
+    gap: var(--spacing-s);
+    align-items: center;
+}
+
+.pagination-meta,
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-m);
+}
+
+.page-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.page-link button {
+    padding: 0;
+    font-weight: normal;
+    font-size: 1rem;
+
+    &.active {
+        font-weight: bold;
+        color: var(--page-link-color);
+    }
+
+    &.disabled {
+        color: rgba(from var(--text-color) r g b / 0.5);
+        pointer-events: none;
+    }
+}
+
+button.pageLink {
+    padding: 0;
+
+    &.disabled {
+        color: rgba(from var(--text-color) r g b / 0.5);
+        pointer-events: none;
+    }
+}

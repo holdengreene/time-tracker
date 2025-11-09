@@ -18,6 +18,8 @@
     --button-background-danger: red;
     --button-color-danger: #ffffff;
     --timer-running-color: green;
+
+    --page-link-color: dodgerblue;
 }
 
 body {
