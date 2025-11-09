@@ -24,4 +24,4 @@ npm install
 npm run build
 
 # Start the server
-npm run start
+npm start -- --open
