@@ -14,19 +14,8 @@ if ! command -v node &> dev/null; then
     node -v
 fi
 
-# Check github for new commits
-git fetch
-
-# Get the number of commits behind
-BEHIND_COUNT=$(git rev-list --count HEAD..@{u})
-
-# If there are commits behind, pull them
-if [ $BEHIND_COUNT -gt 0 ]; then
-    echo "There are $BEHIND_COUNT commits behind. Pulling..."
-    git pull
-fi
-
-echo "I'm a script"
+# Always make sure we're up to date
+git pull
 
 # Start installing the site
 npm install
