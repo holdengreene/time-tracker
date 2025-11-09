@@ -25,13 +25,16 @@ export const route = {
 export default function Home() {
     const projects = createAsync(() => getProjects());
     return (
-        <main>
+        <main class="container">
             <Title>Time Tracker</Title>
-            <h1>Time Tracker</h1>
+            <h1 class="center-text">Time Tracker</h1>
 
-            <CreateProject runningProject={projects()?.runningProject} />
+            <div class="overview-grid">
 
-            <ProjectTable projects={projects()?.allProjects} />
+                <CreateProject runningProject={projects()?.runningProject} />
+
+                <ProjectTable projects={projects()?.allProjects} />
+            </div>
         </main>
     );
 }

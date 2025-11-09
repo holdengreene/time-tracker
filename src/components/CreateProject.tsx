@@ -1,12 +1,13 @@
 import { action, query, useAction, useSubmission } from "@solidjs/router";
 import { eq } from "drizzle-orm";
-import { batch, createEffect, createSignal, Match, onCleanup, onMount, Suspense, Switch } from "solid-js";
+import { batch, createEffect, createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
 import { db } from "~/db";
 import { projectTable } from "~/db/schema";
 import { activeProjectId, activeProjectName, setActiveProjectId, setActiveProjectName } from "~/lib/global";
 import { friendlyTime } from "~/lib/util";
 import { Project } from "~/types";
 import { TIMER_STATUS } from "~/types/constants";
+import "./CreateProject.css";
 
 const addProject = action(async (formData: FormData) => {
     'use server';
@@ -138,19 +139,27 @@ export default function CreateProject(props: Props) {
     return (
         <Switch>
             <Match when={running()}>
-                <p>Tracking {activeProjectName()}</p>
-                <p>{friendlyTime(timer() ?? 0)}</p>
+                <div class="card timer">
+                    <h2><span class="tracking-text">Tracking:</span> <br /> {activeProjectName()}</h2>
+                    <p class="running-timer">{friendlyTime(timer() ?? 0)}</p>
 
-                <button onClick={stopTimer}>Stop</button>
+                    <button class="active" onClick={stopTimer}>Stop</button>
+                </div>
             </Match>
             <Match when={!running()}>
-                <form action={addProject} method="post" ref={form}>
-                    <label for="name">
-                        Name:
-                    </label>
-                    <input id="name" name="name" type="text" required />
-                    <button type="submit">Start</button>
-                </form>
+                <div class="card">
+                    <h2>Start a new project</h2>
+                    <form class="project-form" action={addProject} method="post" ref={form}>
+                        <div class="input-wrap">
+                            <label for="name">
+                                Name
+                            </label>
+                            <input id="name" name="name" type="text" required />
+                        </div>
+
+                        <button type="submit">Start</button>
+                    </form>
+                </div>
             </Match>
         </Switch>
     );

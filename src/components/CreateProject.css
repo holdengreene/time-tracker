@@ -1,0 +1,22 @@
+.tracking-text {
+    font-weight: normal;
+}
+
+.project-form {
+    display: grid;
+    gap: var(--spacing-m);
+    justify-content: flex-start;
+}
+
+.input-wrap {
+    display: grid;
+    gap: var(--spacing-s);
+}
+
+.running-timer {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: var(--spacing-s);
+    color: var(--timer-running-color);
+}

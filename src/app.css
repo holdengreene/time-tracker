@@ -1,39 +1,65 @@
+@import "modern-normalize/modern-normalize.css";
+
+:where(:root) {
+    --spacing-xs: 0.25rem;
+    --spacing-s: 0.5rem;
+    --spacing-m: 1rem;
+    --spacing-l: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+
+    --background-color: #f9f9f9;
+    --card-background: #ffffff;
+    --border-color: #ddd;
+    --text-color: #1a1a1a;
+    --table-background: #f2f2f2;
+    --button-background: darkseagreen;
+    --button-active-background: tomato;
+    --timer-running-color: green;
+}
+
 body {
-  font-family: Gordita, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
-a {
-  margin-right: 1rem;
+button {
+    background-color: var(--button-background);
+    border: none;
+    border-radius: 3px;
+    padding: var(--spacing-s);
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+
+    &.small {
+        font-size: 1rem;
+        padding: var(--spacing-xs) var(--spacing-s);
+    }
+
+    &.active {
+        background-color: var(--button-active-background);
+    }
 }
 
-main {
-  text-align: center;
-  padding: 1em;
-  margin: 0 auto;
+.center-text {
+    text-align: center;
 }
 
-h1 {
-  color: #335d92;
-  text-transform: uppercase;
-  font-size: 4rem;
-  font-weight: 100;
-  line-height: 1.1;
-  margin: 4rem auto;
-  max-width: 14rem;
+.container {
+    padding-inline: 12rem;
 }
 
-p {
-  max-width: 14rem;
-  margin: 2rem auto;
-  line-height: 1.35;
+.overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--spacing-m);
+    align-items: flex-start;
 }
 
-@media (min-width: 480px) {
-  h1 {
-    max-width: none;
-  }
-
-  p {
-    max-width: none;
-  }
+.card {
+    background-color: var(--card-background);
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    padding: var(--spacing-m);
 }
