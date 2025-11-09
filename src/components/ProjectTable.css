@@ -13,3 +13,10 @@
         background-color: var(--table-background);
     }
 }
+
+.delete-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-s);
+}

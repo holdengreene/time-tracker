@@ -15,6 +15,8 @@
     --table-background: #f2f2f2;
     --button-background: darkseagreen;
     --button-active-background: tomato;
+    --button-background-danger: red;
+    --button-color-danger: #ffffff;
     --timer-running-color: green;
 }
 
@@ -40,6 +42,11 @@ button {
     &.active {
         background-color: var(--button-active-background);
     }
+
+    &.danger {
+        background-color: var(--button-background-danger);
+        color: var(--button-color-danger);
+    }
 }
 
 .center-text {
@@ -55,6 +62,7 @@ button {
     grid-template-columns: 1fr 2fr;
     gap: var(--spacing-m);
     align-items: flex-start;
+    margin-bottom: var(--spacing-l);
 }
 
 .card {
