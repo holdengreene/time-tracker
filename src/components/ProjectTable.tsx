@@ -70,11 +70,12 @@ export default function ProjectTable(props: Props) {
             </table>
 
             <dialog ref={modal} class="delete-project-dialog">
+                <h2>Delete Project</h2>
                 <p>Are you sure you want to delete this project?</p>
 
                 <div class="delete-flex">
                     <button class="danger" onClick={() => deleteProj()}>Yes Delete</button>
-                    <button onClick={() => modal?.close()}>No I'm a coward</button>
+                    <button class="secondary" onClick={() => modal?.close()}>No I'm a coward</button>
                 </div>
             </dialog>
         </div>

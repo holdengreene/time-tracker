@@ -47,6 +47,11 @@ button {
         background-color: var(--button-background-danger);
         color: var(--button-color-danger);
     }
+
+    &.secondary {
+        background-color: transparent;
+        color: var(--text-color);
+    }
 }
 
 .center-text {
