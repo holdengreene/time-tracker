@@ -26,6 +26,8 @@ if [ $BEHIND_COUNT -gt 0 ]; then
     git pull
 fi
 
+echo "I'm a script"
+
 # Start installing the site
 npm install
 
