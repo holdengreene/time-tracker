@@ -1,6 +1,7 @@
 @import "modern-normalize/modern-normalize.css";
 
 :where(:root) {
+    color-scheme: light dark;
     --spacing-xs: 0.25rem;
     --spacing-s: 0.5rem;
     --spacing-m: 1rem;
@@ -8,16 +9,17 @@
     --spacing-xl: 2rem;
     --spacing-xxl: 3rem;
 
-    --background-color: #f9f9f9;
-    --card-background: #ffffff;
+    --background-color: light-dark(#f9f9f9, #1a1a1a);
+    --card-background: light-dark(#ffffff, #2b2b2b);
     --border-color: #ddd;
-    --text-color: #1a1a1a;
-    --table-background: #f2f2f2;
-    --button-background: darkseagreen;
+    --text-color: light-dark(#1a1a1a, #f9f9f9);
+    --table-background: light-dark(#f2f2f2, #1a1a1a);
+    --button-background: light-dark(darkseagreen, #04002f);
     --button-active-background: tomato;
     --button-background-danger: red;
     --button-color-danger: #ffffff;
     --timer-running-color: green;
+    --input-background: light-dark(#ffffff, #2b2b2b);
 
     --page-link-color: dodgerblue;
 }
@@ -54,6 +56,28 @@ button {
         background-color: transparent;
         color: var(--text-color);
     }
+}
+
+input {
+    background-color: var(--input-background);
+    border: 1px solid var(--border-color);
+    padding: var(--spacing-s);
+    border-radius: 3px;
+    color: var(--text-color);
+}
+
+.site-title {
+    font-size: 2.5rem;
+    background-image: linear-gradient(
+        90deg in hsl longer hue,
+        purple,
+        orange,
+        tomato,
+        dodgerblue
+    );
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
 }
 
 .center-text {

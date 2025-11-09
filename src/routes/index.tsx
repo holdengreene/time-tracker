@@ -1,6 +1,6 @@
 import { Title } from "@solidjs/meta";
 import { createAsync, query } from "@solidjs/router";
-import { eq, isNotNull, desc } from "drizzle-orm";
+import { desc, eq, isNotNull } from "drizzle-orm";
 import CreateProject from "~/components/CreateProject";
 import ProjectTable from "~/components/ProjectTable";
 import { db } from "~/db";
@@ -27,7 +27,7 @@ export default function Home() {
     return (
         <main class="container">
             <Title>Time Tracker</Title>
-            <h1 class="center-text">Time Tracker</h1>
+            <h1 class="center-text site-title">Time Tracker</h1>
 
             <div class="overview-grid">
 
