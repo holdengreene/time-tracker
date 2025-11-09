@@ -140,12 +140,12 @@ export default function CreateProject(props: Props) {
     function tabState() {
         if (document.visibilityState === "hidden" && interval) {
             clearInterval(interval);
-        } else {
+        } else if (running() && !interval) {
             startTimer(start ?? 0, totalTime);
         }
     }
 
-    onCleanup(() => { stopTimer(); document.removeEventListener("visibilitychange", tabState) });
+    onCleanup(() => stopTimer());
 
     return (
         <Switch>
